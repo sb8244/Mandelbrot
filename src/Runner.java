@@ -1,25 +1,30 @@
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
-import java.text.NumberFormat;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import observer.Observable;
  
+/**
+ * Creates the main window and runs it
+ * @author Stephen Bussey
+ *
+ */
 public class Runner extends JFrame implements Observable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3574552434097247454L;
 	public static final int ImageWidth = 400, ImageHeight = 400;
 	private MandelbrotPane mPane;
 	protected ToolbarPane tPane;
 	private ToolboxDialog tbd;
 	
+	/**
+	 * Initialize the frame
+	 * @throws IOException
+	 */
 	public Runner() throws IOException
 	{
 		super("Mandelbrot");
@@ -41,9 +46,13 @@ public class Runner extends JFrame implements Observable
 		this.add(tPane);
 		this.add(mPane);
 		this.repaint();
-		
 	}
 	
+	/**
+	 * Main runner class
+	 * @param args Unused
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException
 	{
 		Runner win = new Runner();
@@ -51,9 +60,13 @@ public class Runner extends JFrame implements Observable
 		win.setVisible(true);
 	}
 
+	/**
+	 * Controls what happens when the ToolBox is (un)docked
+	 */
 	public void update()
 	{
 		boolean docked = tPane.getDocked();
+		//if docked, undock and create the toolboxdialog
 		if(docked)
 		{
 			tPane.setLocation(0, 0);
@@ -64,6 +77,7 @@ public class Runner extends JFrame implements Observable
 			this.setPreferredSize(this.getSize());
 			tbd.setVisible(true);
 		}
+		//if undocked, dock and hide the toolboxdialog
 		else
 		{
 			tPane.setLocation(0, mPane.getHeight()+5);
@@ -75,8 +89,18 @@ public class Runner extends JFrame implements Observable
 		}
 	}	
 	
+	
+	/**
+	 * Holds the ToolbarPane when the user undocks it
+	 * @author sb8244
+	 *
+	 */
 	class ToolboxDialog extends JDialog implements WindowListener
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3100931086078740000L;
 		Observable obs;
 		public ToolboxDialog(JFrame owner, boolean modal)
 		{
@@ -88,33 +112,22 @@ public class Runner extends JFrame implements Observable
 			this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		}
 		
-		public void windowActivated(WindowEvent arg0) {
-		}
+		public void windowActivated(WindowEvent arg0) {	}
 
-		public void windowClosed(WindowEvent arg0) {
-		
-		}
+		public void windowClosed(WindowEvent arg0) {}
 
-		@Override
+		//update the parent observer that this window was closed
 		public void windowClosing(WindowEvent arg0) {
 			obs.update();
 		}
 
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-		}
+		public void windowDeactivated(WindowEvent arg0) {}
 
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-		}
+		public void windowDeiconified(WindowEvent arg0) {}
 
-		@Override
-		public void windowIconified(WindowEvent arg0) {
-		}
+		public void windowIconified(WindowEvent arg0) {}
 
-		@Override
-		public void windowOpened(WindowEvent arg0) {
-		}
+		public void windowOpened(WindowEvent arg0) {}
 	}
 }
 
