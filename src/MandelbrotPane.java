@@ -8,46 +8,81 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-
+/**
+ * This Pane contains and renders the Mandelbrot set and makes modifications to it
+ * @author sb8244
+ *
+ */
 public class MandelbrotPane extends JPanel implements MouseListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7246875999457604140L;
 	private ArrayList<ColoredPoint> set;
 	private Mandelbrot mb = new Mandelbrot();
 	private int MAX = 20;
 	private Image image;
 
+	/**
+	 * Initialize this pane
+	 */
 	public MandelbrotPane()
 	{
 		set = calculate();
 		this.addMouseListener(this);
 	}
 	
+	/**
+	 * 
+	 * @return What mode of Math.exp is used (true is fast approximate exp, false is slow exact exp)
+	 */
 	public boolean getExpMode()
 	{
 		return mb.getExpMode();
 	}
 	
+	/**
+	 * 
+	 * @param b If true, will use a fast version of Math.exp
+	 */
 	public void useFastExp(boolean b)
 	{
 		mb.useFastExp(b);
 	}
 
+	/**
+	 * 
+	 * @return The width of the image in pixels
+	 */
 	public int getImageWidth()
 	{
 		return mb.ImageWidth;
 	}
 	
+	/**
+	 * 
+	 * @return The height of the image in pixels
+	 */
 	public int getImageHeight()
 	{
 		return mb.ImageHeight;
 	}
 	
+	/**
+	 * Reset the viewport to default and re-render
+	 */
 	public void reset()
 	{
 		mb.reset();
 		render();
 	}
 	
+	/**
+	 * Change the pane's size
+	 * @param w The new width
+	 * @param h The new height
+	 */
 	public void changeSize(int w, int h)
 	{
 		mb.changeSize(w, h);
@@ -55,16 +90,28 @@ public class MandelbrotPane extends JPanel implements MouseListener
 		render();
 	}
 	
+	/**
+	 * Sets the zoom factor
+	 * @param s The new zoom factor
+	 */
 	public void setZoomFactor(int s)
 	{
 		mb.setZoomFactor(s);
 	}
 
+	/**
+	 * 
+	 * @return The zoom factor the set will use
+	 */
 	public int getZoomFactor()
 	{
 		return mb.getZoomFactor();
 	}
 	
+	/**
+	 * Creates the image and paints it to the pane
+	 * Draws a 1px black border on the bottom of the pane
+	 */
 	public void paint(Graphics g)
 	{
 		image = createImage();
@@ -72,44 +119,65 @@ public class MandelbrotPane extends JPanel implements MouseListener
 		g.drawLine(0, getHeight()-1, getWidth(), getHeight()-1);
 	}
 
-	private ArrayList<ColoredPoint> calculate()
-	{
-		long start = System.currentTimeMillis();
-		ArrayList<ColoredPoint> ret = mb.calculate(MAX);
-		System.out.println("Total iterations: " + (MAX*mb.ImageHeight*mb.ImageWidth) + " in " + (System.currentTimeMillis() - start) + "ms");
-		return ret;
-	}
-
+	/**
+	 * 
+	 * @return The max iterations used in generating the set
+	 */
 	public int getMaxIterations()
 	{
 		return MAX;
 	}
 
+	/**
+	 * Set the max iterations that will be used in generating the set
+	 * @param max
+	 */
 	public void setMaxIterations(int max)
 	{
 		MAX = max;
 	}
 
+	/**
+	 * Set the color scheme
+	 * 
+	 * @param s s%10 will have an effect on the color (effectively 0-9)
+	 */
 	public void setColorModifier(int s)
 	{
 		mb.setColorModifier(s);
 	}
 
+	/**
+	 * 
+	 * @return The integer used to represent the color scheme
+	 */
 	public int getColorModifier()
 	{
 		return mb.getColorModifier();
 	}
 
+	/**
+	 * Calculate the set and repaint it
+	 */
 	public void render()
 	{
 		set = calculate();
 		this.repaint();
 	}
+	
+	/**
+	 * 
+	 * @return The image that is painted to the pane
+	 */
 	public Image getImage()
 	{
 		return image;
 	}
 
+	/**
+	 * Creates a bufferedImage and paints the set to it
+	 * @return An Image containing the set
+	 */
 	private Image createImage()
 	{
 		BufferedImage theImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -122,6 +190,10 @@ public class MandelbrotPane extends JPanel implements MouseListener
 		return theImage;
 	}
 
+	/**
+	 * Zoom in when the left mouse is clicked
+	 * Zoom out when the right mouse is clicked
+	 */
 	public void mouseClicked(MouseEvent click) {
 		if(click.getButton() == MouseEvent.BUTTON1)
 		{
@@ -131,16 +203,28 @@ public class MandelbrotPane extends JPanel implements MouseListener
 		{
 			mb.changeView(click.getPoint(), false);
 		}
-		//MAX = MAX * 2;
+		else
+		{
+			return;
+		}
 		set = calculate();
 		this.repaint();
 	}
-	public void mouseEntered(MouseEvent arg0) {
+	
+	/**
+	 * 
+	 * @return An ArrayList containing all of the ColoredPoints to be rendered
+	 */
+	private ArrayList<ColoredPoint> calculate()
+	{
+		//long start = System.currentTimeMillis();
+		ArrayList<ColoredPoint> ret = mb.calculate(MAX);
+		//System.out.println("Total iterations: " + (MAX*mb.ImageHeight*mb.ImageWidth) + " in " + (System.currentTimeMillis() - start) + "ms");
+		return ret;
 	}
-	public void mouseExited(MouseEvent arg0) {
-	}
-	public void mousePressed(MouseEvent arg0) {
-	}
-	public void mouseReleased(MouseEvent arg0) {
-	}
+
+	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent arg0) {}
+	public void mouseReleased(MouseEvent arg0) {}
 }

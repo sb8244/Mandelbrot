@@ -10,8 +10,27 @@ import javax.swing.*;
 
 import observer.Observable;
 
+/**
+ * The ToolBarPane holds all of the options for manipulating the MandelbrotPane including:
+ * 	Change image size
+ * 	Change number of max iterations
+ * 	Change the color scheme
+ * 	Change the zoom factor
+ * 	Save the current image
+ * 	Reset to default view
+ * 	Popout the toolbar
+ * 	Re-render the image
+ * 	Selecting between an approximate and exact implementation of Math.exp()
+ * 	
+ * @author sb8244
+ *
+ */
 public class ToolbarPane extends JPanel implements ActionListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1413862779872127736L;
 	private JButton render, save, resize, reset, popout;
 	private JLabel maxLabel, colorLabel, zoomLabel, dimensionLabel, expLabel;
 	private JFormattedTextField maxField, zoomField, wField, hField;
@@ -22,16 +41,15 @@ public class ToolbarPane extends JPanel implements ActionListener
 	private boolean docked;
 	private JCheckBox expCheckBox;
 
-	public boolean getDocked()
-	{
-		return docked;
-	}
-	
-	public void setDocked(boolean d)
-	{
-		docked = d;
-	}
-	
+	/**
+	 * Initialize everything and add to the Pane (but don't size yet)
+	 * Uses absolute positioning
+	 * @param w The width of this pane
+	 * @param h The height of this pane
+	 * @param mPane The MandelbrotPane that this will be modifiying
+	 * @param parent The Parent Frame this is in
+	 * @param docked Whether this will be docked or not
+	 */
 	public ToolbarPane(int w, int h, MandelbrotPane mPane, JFrame parent, boolean docked)
 	{
 		this.docked = docked;
@@ -107,8 +125,29 @@ public class ToolbarPane extends JPanel implements ActionListener
 		this.add(expCheckBox);
 	}
 
-
+	/**
+	 * 
+	 * @return Whether this Pane is currently docked or free
+	 */
+	public boolean getDocked()
+	{
+		return docked;
+	}
+	
+	/**
+	 * Set whether this is docked or not
+	 * @param d 
+	 */
+	public void setDocked(boolean d)
+	{
+		docked = d;
+	}
+	
+	/**
+	 * Handles all button actions
+	 */
 	public void actionPerformed(ActionEvent event) {
+		//Render with all the appropriate modifications
 		if(event.getSource() == render)
 		{
 			mPane.setColorModifier(Math.abs(colorSlider.getValue()));
@@ -117,6 +156,7 @@ public class ToolbarPane extends JPanel implements ActionListener
 			mPane.useFastExp(expCheckBox.isSelected());
 			mPane.render();
 		}
+		//Save the current image in the format outputN.png where N is the next available image number
 		else if(event.getSource() == save)
 		{
 			try {
@@ -133,6 +173,7 @@ public class ToolbarPane extends JPanel implements ActionListener
 				e.printStackTrace();
 			}
 		}
+		//resize this Pane and the MandelbrotPane based on user input
 		else if(event.getSource() == resize)
 		{
 			mPane.changeSize(Math.abs(Integer.parseInt(wField.getText())), Math.abs(Integer.parseInt(hField.getText())));	
@@ -147,15 +188,20 @@ public class ToolbarPane extends JPanel implements ActionListener
 				parent.setSize(mPane.getImageWidth(), mPane.getImageHeight()+parent.getInsets().top+parent.getInsets().bottom);
 			}
 		}
+		//reset the view
 		else if(event.getSource() == reset)
 		{
 			mPane.reset();
 		}
+		//undock this pane
 		else if(event.getSource() == popout)
 		{
 			obs.update();
 		}
 	}
+	/**
+	 * Sets the size and location of all components
+	 */
 	private void initialize()
 	{			
 		popout.setSize(60, 25);
