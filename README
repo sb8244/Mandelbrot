@@ -1,1 +1,23 @@
+Mandelbrot
+
+Java desktop application which will plot any view of the Mandelbrot set, complete with the ability to change color scheme, view, image size, iteration count and the ability to save the current view as a picture.
+
+Dependences: Java Runtime Environment @ http://www.oracle.com/technetwork/java/javase/downloads/index.html 
+
+To run: Execute Mandelbrot.jar with the command "java -jar Mandelbrot.jar" in terminal or command line, or double click Mandelbrot.jar if your operating system has the default program for .jar files set.
+
+Controls
+Left click - Zoom in by zoom factor with the clicked point as the new center
+Right click - Zoom out by zoom factor with the clicked point as the new center
+Max Iterations - Increasing this will improve the clarity of the set but will cause rendering to take longer.  As you zoom in, you must increase this
+Color Modifier - There are 10 available color schemes
+Zoom Factor - When zooming in or out, the factor to zoom by
+Fast Exp - This should be left on at all times.  It provides an approximation for coloring, but improves speed significantly
+Width - Height - The size of the image in pixels(default 400 x 400)
+Resize - Anytime you want to change the image size, you must use this button
+Set - Will cause the current view to render with the current options set.  Anytime you change an option and want its effect to be seen, you must click this. 
+Save - Save the image as outputi.png where i is the next available number based on images already saved
+Reset view - Return to the view of when the program was started
+^ - Popout the tool box 
+
 Author: Stephen Bussey
